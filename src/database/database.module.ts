@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from './constants';
+import * as usersSchema from 'src/db/schema/users';
 
 @Module({
   providers: [
@@ -14,11 +15,14 @@ import { DATABASE_CONNECTION } from './constants';
         });
 
         return drizzle(pool, {
-          schema: {},
+          schema: {
+            ...usersSchema,
+          },
         });
       },
       inject: [ConfigService],
     },
   ],
+  exports: [DATABASE_CONNECTION],
 })
 export class DatabaseModule {}
